@@ -18,6 +18,18 @@ Class schedule, store a reference to the owner. Then it can get all the owner's 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
 
+1/ I was trying to walk through my thoughts with AI, and it asked me """So the scheduler needs access to the tasks, right? Does your diagram show a direct connection from scheduler to task, or does it go through pet?"""
+For my current diagram, scheduler has no arrow pointing to the task.  But after second think, I understand the secheduler can have access to the tasks, through the train from owner, pet to tasks. the scheduler knows which owner it's managing for, the owner has multiple pets, each pet has multiple tasks with duration and priority, and the scheduler accesses those tasks by following that chain—owner to pet to task. That way we don't need a direct scheduler-to-task connection, which keeps things cleaner. So I haven't made change to my uml diagram.
+
+2/ for task class, I add description, and frequency attributes, time. after reading the phase 2 insturction. 
+ 
+ question: how should the Scheduler retrieve all tasks from the Owner's pets?
+3/ I add contractors and getters and setters for every class,
+so that scheduler can have access to the owner and then get the pet and task. scheduler stores owner in its constructor, then uses owner's getter to access pets, then uses pet's getter to access tasks
+4/ change the duration attribute to time, so that the scheduler can sort the plan 
+5/ I am very confuesd about if the scheduler is for user or for pet. 
+My guess is that one scheduler handles all pets for one owner.
+
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
