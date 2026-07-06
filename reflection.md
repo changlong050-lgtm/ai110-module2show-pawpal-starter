@@ -7,6 +7,12 @@
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
+I will have 4 classes: owner, pet, task, and schedule. 
+Owener can view pets, add tasks. 
+Pet owns the task, so it has the method, add task, get task, update task, delete task. 
+For the task class, it will has the attribute completed, name, duration, priority, and a method mark_complete. 
+Class schedule, store a reference to the owner. Then it can get all the owner's pets and their tasks to schedule. and the method: generate daily plan() 
+
 **b. Design changes**
 
 - Did your design change during implementation?
