@@ -7,11 +7,11 @@
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
-I will have 4 classes: owner, pet, task, and schedule. 
+I will have 4 classes: owner, pet, task, and scheduler. 
 Owener can view pets, add tasks. 
 Pet owns the task, so it has the method, add task, get task, update task, delete task. 
 For the task class, it will has the attribute completed, name, duration, priority, and a method mark_complete. 
-Class schedule, store a reference to the owner. Then it can get all the owner's pets and their tasks to schedule. and the method: generate daily plan() 
+Class scheduler, store a reference to the owner. Then it can get all the owner's pets and their tasks to schedule. and the method: generate daily plan() 
 
 **b. Design changes**
 
@@ -30,6 +30,11 @@ so that scheduler can have access to the owner and then get the pet and task. sc
 5/ I am very confuesd about if the scheduler is for user or for pet. 
 My guess is that one scheduler handles all pets for one owner.
 
+At first, I didn't read the app.py and I didn't run the code to see the page. After seeing the page, the project is more clear.
+
+6/ At first, my time attribute in the task class only shows the hour. Later I changed it to be including the year, date and the hour, so I can handle recurring task.
+
+
 ---
 
 ## 2. Scheduling Logic and Tradeoffs
@@ -39,10 +44,15 @@ My guess is that one scheduler handles all pets for one owner.
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
 
+
+
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
+Tradeoff: in my scheduler, detect_conflicts compare exact get_time() match, not overlap with duration. Two task start 08:00 and 08:15, dur 30min each will be overlapped, but no flag since times are different.
+
+I detect conflict only using the time because this is a small, personal pet-care scheduler with just a handful of tasks per day, entered manually by the owner. An exact-time-match check is simple and fast (just look for duplicates in a list), and it catches the most common real mistake — accidentally scheduling two tasks for the same slot. Real interval-overlap detection would require sorting tasks by start time and comparing each task's end time against the next one's start time, which is more correct but adds complexity that isn't worth it for this scale of app
 
 ---
 

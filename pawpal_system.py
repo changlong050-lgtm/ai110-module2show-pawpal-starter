@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 class Owner:
     def __init__(self, name):
         """Create an owner with a name and an empty pet list."""
@@ -68,10 +70,20 @@ class Pet:
         """Add a task to the pet's task list."""
         self._tasks.append(task)
 
+    def complete_task(self, task):
+        """Mark task done; if recurring, append the returned next-occurrence Task."""
+        next_task = task.mark_complete()
+        if next_task is not None:
+            self._tasks.append(next_task)
+        return next_task
+
+
+
+
 
 class Task:
-    def __init__(self, name, duration, priority, description="", frequency="", time=""):
-        """Create a task with its name, duration, priority, and optional details."""
+    def __init__(self, name, duration, priority, description="", frequency="", time=None):
+        """Create task. time is a datetime (date+hour), required for recurring logic."""
         self._name = name
         self._duration = duration
         self._priority = priority
@@ -133,8 +145,24 @@ class Task:
         return self._completed
 
     def mark_complete(self):
-        """Mark the task as completed."""
+        """Mark task done. For daily/weekly tasks, return a new Task instance for the
+        next occurrence (same hour, next day/week) instead of mutating this one."""
         self._completed = True
+        freq = (self._frequency or "").lower()
+        if freq == "daily":
+            next_time = self._time + timedelta(days=1)
+        elif freq == "weekly":
+            next_time = self._time + timedelta(weeks=1)
+        else:
+            return None
+        return Task(
+            self._name,
+            self._duration,
+            self._priority,
+            description=self._description,
+            frequency=self._frequency,
+            time=next_time,
+        )
 
 
 class Scheduler:
@@ -158,14 +186,21 @@ class Scheduler:
                 pairs.append((pet, task))
         return pairs
 
+    def filter_incomplete(self, tasks):
+        """Return only the tasks that are not yet completed."""
+        return [task for task in tasks if not task.is_completed()]
+
+    def sort_by_time(self, tasks):
+        """Return tasks sorted earliest to latest."""
+        return sorted(tasks, key=lambda task: task.get_time())
+
     def generate_daily_plan(self):
         """Return formatted schedule lines grouped by pet, sorted by time."""
         lines = []
         for pet in self._owner.get_pets():
-            tasks = [task for task in pet.get_tasks() if not task.is_completed()]
+            tasks = self.sort_by_time(self.filter_incomplete(pet.get_tasks()))
             if not tasks:
                 continue
-            tasks.sort(key=lambda task: task.get_time())
             lines.append(f"Daily plan for {pet.get_name()} ({pet.get_species()}):")
             for task in tasks:
                 lines.append(f"  At {task.get_time()}, {task.get_name()}.")
