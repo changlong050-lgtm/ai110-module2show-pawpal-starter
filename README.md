@@ -42,6 +42,7 @@ pip install -r requirements.txt
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
 
+
 ## 🖥️ Sample Output
 
 Paste a sample of your app's CLI or Streamlit output here so a reader can see what a generated plan looks like:
@@ -105,12 +106,44 @@ tests\test_pawpal.py ..................                                         
 
 ## 📸 Demo Walkthrough
 
-Describe your app in numbered steps so a reader can follow along without watching a video:
+### Main features
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+- Add an owner and one or more pets.
+- Add tasks to a pet (name, duration, priority, description, frequency, time).
+- Generate a sorted daily plan across all pets.
+- Detect scheduling conflicts (two tasks at the same time).
+- Mark a task complete — recurring tasks (daily/weekly) automatically create their next occurrence.
+
+### Example workflow
+
+1. Create an owner (`Owner("Alex")`) and add a pet (`Pet("Snoopy", "Dog")`).
+2. Add a task to that pet, e.g. a daily "Walk" at 9 AM (`owner.add_task(dog, walk)`).
+3. Add a second pet with a task scheduled at the same time as an existing task, to see conflict detection in action.
+4. Create a `Scheduler(owner)` and call `generate_daily_plan()` to view today's schedule.
+5. Call `detect_conflicts()` to check for overlapping tasks before finalizing the plan.
+6. Mark a recurring task complete (`pet.complete_task(task)`) and confirm a new Task for the next day/week appears in the pet's task list.
+
+### Key Scheduler behaviors shown
+
+- **Sorting** — `sort_by_time()` orders each pet's tasks earliest to latest before display.
+- **Filtering** — `filter_incomplete()` drops finished tasks out of the daily plan.
+- **Conflict warnings** — `detect_conflicts()` returns `True` when two tasks (even across different pets) share the same time, e.g. "Vet Visit" and "Grooming" both at 2 PM.
+- **Recurrence** — `mark_complete()` on a daily/weekly task returns a new `Task` instance one day/week later; one-time tasks return `None`.
+
+### Sample CLI output (from `main.py`)
+
+```
+Today's Schedule
+=================
+Daily plan for Snoopy (Dog):
+  At 2026-07-07 09:00:00, Walk.
+  At 2026-07-07 14:00:00, Vet Visit.
+
+Daily plan for KT (Cat):
+  At 2026-07-07 08:00:00, Feed.
+  At 2026-07-07 14:00:00, Grooming.
+
+⚠️  Conflict detected: two or more tasks are scheduled at the same time!
+```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->

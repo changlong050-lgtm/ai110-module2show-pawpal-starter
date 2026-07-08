@@ -1,0 +1,43 @@
+classDiagram
+    class Owner {
+        +str name
+        +list~Pet~ pets
+        +add_pet(pet) void
+        +add_task(pet, task) void
+        +view_pets() list~Pet~
+    }
+
+    class Pet {
+        +str name
+        +str species
+        +list~Task~ tasks
+        +add_task(task) void
+        +get_tasks() list~Task~
+        +complete_task(task) Task
+    }
+
+    class Task {
+        +str name
+        +int duration
+        +str priority
+        +str description
+        +str frequency
+        +datetime time
+        +bool completed
+        +mark_complete() Task
+    }
+
+    class Scheduler {
+        +Owner owner
+        -_all_pet_tasks() list~tuple~
+        +filter_incomplete(tasks) list~Task~
+        +sort_by_time(tasks) list~Task~
+        +generate_daily_plan() list~str~
+        +detect_conflicts() bool
+    }
+
+    Owner "1" --> "*" Pet : has
+    Pet "1" --> "*" Task : contains
+    Pet ..> Task : creates (recurring)
+    Scheduler "1" --> "1" Owner : schedules_for
+    Scheduler ..> Task : uses
