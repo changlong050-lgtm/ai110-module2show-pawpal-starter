@@ -59,19 +59,38 @@ Daily plan for KT (Cat):
 
 ## 🧪 Testing PawPal+
 
+### Run Tests
+
 ```bash
 # Run the full test suite:
-pytest
-
-# Run with coverage:
-pytest --cov
+python -m pytest
 ```
 
-Sample test output:
+### What We Test
 
-```
-# Paste your pytest output here
-```
+Our test suite covers four main areas:
+
+1. **Sorting Correctness** — Tasks are ordered chronologically by time, even when added out of order. Edge cases include empty task lists.
+
+2. **Recurrence Logic** — Daily and weekly tasks automatically create new instances when marked complete, with the correct due date (24 hours or 7 days later). One-time tasks don't generate follow-ups.
+
+3. **Conflict Detection** — The system identifies scheduling conflicts when two tasks share the same time, even across different pets. Tasks without times are handled safely.
+
+4. **Edge Cases** — Incomplete task filtering, pets with no pending tasks, owner-pet relationships, and getter/setter validation.
+
+### Test Results
+================================================== test session starts ===================================================
+platform win32 -- Python 3.14.5, pytest-9.0.3, pluggy-1.6.0
+rootdir: C:\Users\at252\OneDrive\Documents\ai110-module2show-pawpal-starter
+plugins: anyio-4.13.0
+collected 18 items
+tests\test_pawpal.py ..................                                                                             [100%]
+=================================================== 18 passed in 0.08s ===================================================
+
+### Confidence Level
+
+⭐⭐⭐⭐ (4 stars) — The system handles core scheduling logic and edge cases reliably.
+
 
 ## 📐 Smarter Scheduling
 

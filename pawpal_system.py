@@ -207,14 +207,14 @@ class Scheduler:
             lines.append("")
         return lines
 
-    def sort_by_priority(self):
-        """Return all tasks sorted from highest to lowest priority."""
-        priority_order = {"high": 0, "medium": 1, "low": 2}
-        tasks = [task for _, task in self._all_pet_tasks()]
-        return sorted(
-            tasks,
-            key=lambda task: priority_order.get(task.get_priority().lower(), 99),
-        )
+    # def sort_by_priority(self):
+    #     """Return all tasks sorted from highest to lowest priority."""
+    #     priority_order = {"high": 0, "medium": 1, "low": 2}
+    #     tasks = [task for _, task in self._all_pet_tasks()]
+    #     return sorted(
+    #         tasks,
+    #         key=lambda task: priority_order.get(task.get_priority().lower(), 99),
+    #     )
 
     def detect_conflicts(self):
         """Return True if any two tasks share the same scheduled time."""
